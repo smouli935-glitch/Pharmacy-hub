@@ -168,7 +168,9 @@ const PHARMACY_DATA = {
   ]
 };
 (function(){
+const theme=document.getElementById("themeButton");
 else{document.getElementById("err").textContent="Incorrect password";pw.value="";pw.focus()}}
+pw.addEventListener("keydown",e=>{if(e.key==="Enter")unlock()});
 function applyTheme(dark){document.body.classList.toggle("dark",dark);theme.textContent=dark?"☀️ Light":"🌙 Dark"}
 applyTheme(localStorage.getItem("pharmacyTheme")==="dark");
 theme.addEventListener("click",()=>{const dark=!document.body.classList.contains("dark");localStorage.setItem("pharmacyTheme",dark?"dark":"light");applyTheme(dark)});
