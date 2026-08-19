@@ -9,7 +9,8 @@
 :root{--bg:#f3faf8;--card:#fff;--ink:#102827;--muted:#66807d;--line:#d8ebe7;--green:#078a76;--soft:#e5f6f1;--hero1:#f8fdfc;--hero2:#dff5ef}
 body.dark{--bg:#07110f;--card:#0e1d1a;--ink:#e8f5f2;--muted:#9ab5b0;--line:#29443f;--soft:#193a35;--hero1:#091715;--hero2:#123a35}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink);transition:.2s}a{color:inherit;text-decoration:none}
-.lockbox input{width:100%;padding:14px;border:1px solid #d8ebe7;border-radius:11px;font-size:16px}nav{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line)}.nav{max-width:1100px;margin:auto;min-height:68px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;gap:15px}.logo{font-weight:900;font-size:21px}.logo span{color:var(--green)}.links{display:flex;align-items:center;gap:18px;font-size:13px;font-weight:800;color:var(--muted)}#themeButton{border:1px solid var(--line);background:var(--soft);color:var(--ink);padding:9px 12px;border-radius:10px;font-weight:900;cursor:pointer}
+
+nav{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--line)}.nav{max-width:1100px;margin:auto;min-height:68px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;gap:15px}.logo{font-weight:900;font-size:21px}.logo span{color:var(--green)}.links{display:flex;align-items:center;gap:18px;font-size:13px;font-weight:800;color:var(--muted)}#themeButton{border:1px solid var(--line);background:var(--soft);color:var(--ink);padding:9px 12px;border-radius:10px;font-weight:900;cursor:pointer}
 .wrap{max-width:1100px;margin:auto}.hero{padding:70px 18px;background:linear-gradient(135deg,var(--hero1),var(--hero2))}.badge{color:#056b5c;font-weight:900;font-size:12px}.hero h1{font-size:clamp(42px,7vw,70px);line-height:.98;letter-spacing:-3px;margin:14px 0}.hero h1 span{color:var(--green)}.hero p{max-width:650px;color:var(--muted);font-size:17px}
 section{padding:50px 18px}.title{margin-bottom:22px}.title h2{font-size:31px;margin:0}.title p{color:var(--muted)}.year{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 7px 22px #00000008}.yearHead{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:17px}.yearHead small{color:var(--green);font-weight:900}.yearHead h2{margin:4px 0 0}.btn{display:inline-block;background:var(--green);color:#fff;padding:11px 14px;border-radius:10px;font-weight:900}.subjects{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.subject{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);border-radius:11px;background:var(--bg)}.subject span,.exam>span{width:32px;height:32px;display:grid;place-items:center;border-radius:8px;background:var(--soft);color:var(--green);font-size:11px;font-weight:900}.subject b{font-size:14px}.subject em,.exam em{margin-left:auto;background:var(--soft);color:var(--green);padding:8px 10px;border-radius:8px;font-size:12px;font-style:normal;font-weight:900}.empty{padding:14px;color:var(--muted);border:1px dashed var(--line);border-radius:10px}
 .extraNotes{background:var(--bg)}.noteCard{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}.noteIcon{width:46px;height:46px;display:grid;place-items:center;border-radius:12px;background:var(--soft);font-size:23px}.noteCard h3{margin:0 0 5px}.noteCard p{margin:0;color:var(--muted)}
@@ -27,7 +28,7 @@ section{padding:50px 18px}.title{margin-bottom:22px}.title h2{font-size:31px;mar
 </style>
 </head>
 <body>
-<h2>Pharmacy Hub</h2><p>Enter password</p><input id="pw" type="password" placeholder="Password" autocomplete="off"><button id="unlockBtn">🔓 Unlock</button><div id="err" style="color:#c0392b;font-size:13px;min-height:18px;margin-top:10px"></div></div></div>
+
 <nav><div class="nav"><div class="logo">Pharm<span>acy</span> Hub</div><div class="links"><a href="#years">Years</a><a href="#extraNotes">Extra Notes</a><a href="#exam">Exam Prep</a><button id="themeButton">🌙 Dark</button></div></div></nav>
 <header class="hero"><div class="wrap"><span class="badge">PHARM D STUDY PLATFORM</span><h1>Pharmacy<br><span>Knowledge Hub</span></h1><p>Year-wise and subject-wise Google Drive resources, organized for quick study access.</p></div></header>
 <section id="years"><div class="wrap"><div class="title"><h2>📚 Pharm D Years</h2><p>Open complete year folders or individual subject drives.</p></div><div id="yearsList"></div></div></section>
@@ -168,8 +169,8 @@ const PHARMACY_DATA = {
   ]
 };
 (function(){
-lock=document.getElementById("lock"),pw=document.getElementById("pw"),theme=document.getElementById("themeButton");
-else{document.getElementById("err").textContent="Incorrect password";pw.value="";pw.addEventListener("keydown",e=>{if(e.key==="Enter")unlock()});function applyTheme(dark){document.body.classList.toggle("dark",dark);theme.textContent=dark?"☀️ Light":"🌙 Dark"}
+const theme=document.getElementById("themeButton");
+function applyTheme(dark){document.body.classList.toggle("dark",dark);theme.textContent=dark?"☀️ Light":"🌙 Dark"}
 applyTheme(localStorage.getItem("pharmacyTheme")==="dark");
 theme.addEventListener("click",()=>{const dark=!document.body.classList.contains("dark");localStorage.setItem("pharmacyTheme",dark?"dark":"light");applyTheme(dark)});
 const yearsList=document.getElementById("yearsList");
