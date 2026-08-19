@@ -178,7 +178,11 @@ applyTheme(localStorage.getItem("pharmacyTheme")==="dark");
 theme.addEventListener("click",()=>{const dark=!document.body.classList.contains("dark");localStorage.setItem("pharmacyTheme",dark?"dark":"light");applyTheme(dark)});
 const yearsList=document.getElementById("yearsList");
 PHARMACY_DATA.years.forEach((y,i)=>{
-let subjects=y.subjects.length?y.subjects.map((s,j)=>`<a class="subject" href="${s.url}" target="_blank" rel="noopener"><span>${String(j+1).padStart(2,"0")}</span><b>${s.name}</b><em>Open ↗</em></a>`).join(""):"<div class='empty'>Subject links can be added later.</div>";
+let subjects=y.subjects.length?y.subjects.map((s,j)=>{
+const name=Array.isArray(s)?s[0]:s.name;
+const url=Array.isArray(s)?s[1]:s.url;
+return `<a class="subject" href="${url}" target="_blank" rel="noopener"><span>${String(j+1).padStart(2,"0")}</span><b>${name}</b><em>Open ↗</em></a>`;
+}).join(""):"<div class='empty'>Subject links can be added later.</div>";
 yearsList.insertAdjacentHTML("beforeend",`<article class="year"><div class="yearHead"><div><small>${String(i+1).padStart(2,"0")} · PHARM D</small><h2>${y.year}</h2></div><a class="btn" href="${y.complete}" target="_blank" rel="noopener">Complete Drive ↗</a></div><div class="subjects">${subjects}</div></article>`);
 });
 const examList=document.getElementById("examList");
