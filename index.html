@@ -25,9 +25,40 @@ section{padding:50px 18px}.title{margin-bottom:22px}.title h2{font-size:31px;mar
 .importantCard p{margin:0;color:var(--muted)}
 @media(max-width:620px){.importantCard{align-items:flex-start;padding:17px}.importantCard h2{font-size:18px}}
 
+
+/* Pharmacy Hub access gate */
+#accessGate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 50% 30%,rgba(7,138,118,.18),transparent 42%),#06100e;color:var(--ink)}
+.accessBox{width:min(560px,100%);padding:34px 22px;text-align:center;border:1px solid rgba(120,220,200,.16);border-radius:24px;background:rgba(14,29,26,.96);box-shadow:0 20px 80px rgba(0,0,0,.45)}
+.accessBadge{display:inline-block;color:#54cdb9;font-size:12px;font-weight:900;letter-spacing:1.5px;margin-bottom:12px}
+.accessBox h2{margin:0;font-size:clamp(30px,7vw,48px);line-height:1.05;color:#e8f5f2}
+.accessBox p{color:#9ab5b0;margin:12px auto 24px;max-width:430px}
+.accessButton{width:100%;border:0;border-radius:14px;padding:17px 18px;background:#078a76;color:#fff;font-size:19px;font-weight:900;cursor:pointer;box-shadow:0 10px 30px rgba(7,138,118,.25)}
+#countdownBox{display:none;width:100%;border:1px solid #29443f;border-radius:14px;padding:18px;background:#07110f}
+#countdown{font-size:58px;font-weight:950;line-height:1;color:#e8f5f2}
+#accessGranted{display:none;width:100%;border-radius:14px;padding:18px;background:#19a974;color:#fff;font-size:20px;font-weight:950}
+.accessHint{font-size:12px!important;margin:18px 0 0!important;color:#66807d!important}
+body.locked{overflow:hidden}
+
+.telegramCard{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin-top:18px;box-shadow:0 7px 22px #00000008}
+.telegramIcon{width:48px;height:48px;display:grid;place-items:center;border-radius:13px;background:#e7f6ff;font-size:24px}
+.telegramCard h3{margin:0 0 4px}.telegramCard p{margin:0;color:var(--muted);font-size:14px}
+.telegramBtn{margin-left:auto;background:#168dcc;color:#fff;padding:11px 15px;border-radius:10px;font-weight:900;white-space:nowrap}
+@media(max-width:620px){.telegramCard{align-items:flex-start}.telegramBtn{margin-left:auto;margin-top:2px}}
 </style>
 </head>
-<body>
+<body class="locked">
+<div id="accessGate" aria-label="Pharmacy Hub access">
+  <div class="accessBox">
+    <div class="accessBadge">📚 PHARMACY HUB</div>
+    <h2>Pharm.D Materials & Notes</h2>
+    <p>Year-wise notes, study materials, important questions and Google Drive resources — organized in one place.</p>
+    <button id="accessButton" class="accessButton">▶️ Click Here</button>
+    <div id="countdownBox"><div id="countdown">5</div></div>
+    <div id="accessGranted">🔓 Access Granted</div>
+    <p class="accessHint">Free study resources • Pharm.D • Google Drive links</p>
+  </div>
+</div>
+
 
 <nav><div class="nav"><div class="logo">Pharm<span>acy</span> Hub</div><div class="links"><a href="#years">Years</a><a href="#extraNotes">Extra Notes</a><a href="#exam">Exam Prep</a><button id="themeButton">🌙 Dark</button></div></div></nav>
 <header class="hero"><div class="wrap"><span class="badge">PHARM D STUDY PLATFORM</span><h1>Pharmacy<br><span>Knowledge Hub</span></h1><p>Year-wise and subject-wise Google Drive resources, organized for quick study access.</p></div></header>
@@ -43,6 +74,20 @@ section{padding:50px 18px}.title{margin-bottom:22px}.title h2{font-size:31px;mar
         <h2>Important Questions for Pharm D 2nd Year</h2>
         <p>Important and repeated questions can be added here for quick revision.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="telegram" class="extraNotes">
+  <div class="wrap">
+    <div class="telegramCard">
+      <div class="telegramIcon">📢</div>
+      <div>
+        <h3>Join Our Telegram Channel</h3>
+        <p>Pharm.D notes, study materials and latest updates.</p>
+      </div>
+      <a class="telegramBtn" href="https://t.me/+Ka2Jdv8fHZkzMmM9" target="_blank" rel="noopener">Join Telegram ↗</a>
     </div>
   </div>
 </section>
@@ -135,10 +180,6 @@ const PHARMACY_DATA = {
         [
           "Pharmacotherapeutic 2",
           "https://drive.google.com/drive/folders/14coecplpA6p7lJj5ld0QuZANM1yXtQmX"
-        ],
-        [
-          "Pharmaceutical Jurisprudence",
-          "https://drive.google.com/drive/folders/1ds062Dq4HmkSONwp0GH3sN5Ka1OwmlHW"
         ]
       ]
     },
@@ -189,6 +230,37 @@ yearsList.insertAdjacentHTML("beforeend",`<article class="year"><div class="year
 const examList=document.getElementById("examList");
 PHARMACY_DATA.exam.forEach((e,i)=>examList.insertAdjacentHTML("beforeend",`<a class="exam" href="${e[1]}" target="_blank" rel="noopener"><span>${String(i+1).padStart(2,"0")}</span><div><b>${e[0]}</b><small>Google Drive resource</small></div><em>Open ↗</em></a>`));
 })();
+
+// Pharmacy Hub access countdown
+(function(){
+  const gate=document.getElementById("accessGate");
+  const button=document.getElementById("accessButton");
+  const box=document.getElementById("countdownBox");
+  const count=document.getElementById("countdown");
+  const granted=document.getElementById("accessGranted");
+  if(!gate||!button)return;
+  button.addEventListener("click",function(){
+    button.style.display="none";
+    box.style.display="block";
+    let n=5;
+    count.textContent=n;
+    const timer=setInterval(function(){
+      n--;
+      if(n>0){count.textContent=n;}
+      else{
+        clearInterval(timer);
+        box.style.display="none";
+        granted.style.display="block";
+        setTimeout(function(){
+          gate.style.opacity="0";
+          gate.style.transition="opacity .35s ease";
+          setTimeout(function(){gate.remove();document.body.classList.remove("locked");},350);
+        },500);
+      }
+    },1000);
+  });
+})();
+
 </script>
 </body>
 </html>
